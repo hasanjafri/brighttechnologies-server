@@ -1,0 +1,31 @@
+version: "3"
+services:
+
+  appserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - "./src:/src"
+    depends_on:
+      - "postgres"
+      - "redis"
+    ports:
+      - 6969:6969
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_HOST=redis
+
+  postgres:
+    image: "library/postgres:11.1"
+    environment:
+      POSTGRES_DB: "brightTechnologiesDb"
+      POSTGRES_USER: "btadmin"
+      POSTGRES_PASSWORD: "btserver"
+    expose:
+      - "5432"
+
+  redis:
+    image: "library/redis:5.0.3"
+    expose:
+      - "6379"
